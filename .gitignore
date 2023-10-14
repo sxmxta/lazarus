@@ -1,8 +1,5 @@
 # Project specific
 node_modules/
-lib/
-dist
-
 
 # Rest of the file pulled from https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
