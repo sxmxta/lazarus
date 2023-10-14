@@ -1,4 +1,4 @@
-# setup-lazarus
+# lazarus
 
 [![Actions Status](https://github.com/sxmxta/lazarus/workflows/build/badge.svg)](https://github.com/sxmxta/lazarus/actions)
 
@@ -18,6 +18,7 @@ Possible values:
 * `stable` - Installs the latest stable version: 2.2.6
 * `2.2.6`  - comes with `FPC v3.2.2`
 * `2.2.4`  - comes with `FPC v3.2.2`
+* `2.2.2`  - comes with `FPC v3.2.2`
 
 ### include-packages
 
@@ -66,7 +67,7 @@ Unfortunately there are some restrictions:
 ```yaml
 steps:
 - uses: actions/checkout@v3
-- uses: gcarreno/setup-lazarus@v3
+- uses: sxmxta/lazarus@v1
   with:
     lazarus-version: "stable"
     include-packages: "Synapse 40.1"
@@ -95,12 +96,12 @@ jobs:
     strategy:
       matrix:
         operating-system: [windows-latest,ubuntu-latest,macos-latest]
-        lazarus-versions: [dist, stable, 2.2.0, 2.0.12, 2.0.10, 2.0.8, 2.0.6]
+        lazarus-versions: [dist, stable, 2.2.4, 2.2.2]
     steps:
     - name: Checkout source code
       uses: actions/checkout@v3
     - name: Install Lazarus
-      uses: gcarreno/setup-lazarus@v3
+      uses: sxmxta/lazarus@v1
       with:
         lazarus-version: ${{ matrix.lazarus-versions }}
         include-packages: "Synapse 40.1"

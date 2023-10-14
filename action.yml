@@ -1,6 +1,6 @@
-name: 'Setup Lazarus environment'
+name: 'Lazarus Build Environment'
 
-description: 'Setup a Lazarus environment adding it to the PATH'
+description: 'Install Lazarus and Setup a Lazarus environment adding it to the PATH'
 
 branding:
   icon: 'chevrons-right'
@@ -10,7 +10,7 @@ inputs:
   lazarus-version:
     description: 'Version of Lazarus'
     required: true
-    default: 'dist'
+    default: '2.2.6'
   include-packages:
     description: 'Include packages that the project needs'
     required: false
@@ -19,7 +19,7 @@ inputs:
     required: false
     default: true
   os-arch:
-    description: 'installing 32-bit Lazarus on Windows 64'
+    description: 'Installing 32-bit Lazarus on Windows 64'
     required: false
     default: 'x64'
 
