@@ -13,7 +13,7 @@ async function run(): Promise<void> {
         let withCache = core.getInput('with-cache') == 'true';
 
         // 'os-arch' Installing 32-bit(i386) Lazarus on Windows 64
-        let osArch = core.getInput('os-arch') || 'i386';
+        let osArch = core.getInput('os-arch') || 'i386'; // all:x64, windows:i386, linux:arm64
 
         let Installer = new inst.Installer(lazarusVersion, includePackages.split(','), withCache, osArch);
         await Installer.install();
