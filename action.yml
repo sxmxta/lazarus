@@ -18,6 +18,10 @@ inputs:
     description: 'Use cache for installer files'
     required: false
     default: true
+  os-arch:
+    description: 'installing 32-bit Lazarus on Windows 64'
+    required: false
+    default: 'x64'
 
 runs:
   using: 'node16'
