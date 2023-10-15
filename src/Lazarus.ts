@@ -381,6 +381,9 @@ export class Lazarus {
      * 在这里手动编译安装lazarus
      */
     private linuxARM64(cacheRestored: boolean) {
+        let workspace = this._getWorkspace();
+        core.info("_workspace: " + workspace)
+
         let arm64 = pkgs['linuxARM64']
         let version = arm64[this._LazarusVersion]
         let fpcVersion = version['fpcversion']
@@ -395,11 +398,6 @@ export class Lazarus {
         lazarus += version['laz']
 
         let downloadPath_LIN: string;
-        let installRoot = process.env['INSTALL_ROOT'];
-        core.info("INSTALL_ROOT: " + installRoot)
-        for(let key in process.env){
-            core.info("process.env key: " + key + " value: " + process.env[key])
-        }
         core.info(`_downloadLazarus - Downloading ${lazarus}`);
 
         core.info(`_downloadFPC - Downloading ${fpc}`);
@@ -474,5 +472,11 @@ export class Lazarus {
         ok(tempDirectory, 'Expected RUNNER_TEMP to be defined');
         tempDirectory = path.join(tempDirectory, 'installers');
         return tempDirectory;
+    }
+
+    private _getWorkspace(): string {
+        let workspace = process.env['RUNNER_WORKSPACE'] || '';
+        ok(workspace, 'Expected RUNNER_WORKSPACE to be defined');
+        return workspace;
     }
 }

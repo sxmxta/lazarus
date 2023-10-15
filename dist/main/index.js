@@ -594,6 +594,8 @@ class Lazarus {
      * 在这里手动编译安装lazarus
      */
     linuxARM64(cacheRestored) {
+        let workspace = this._getWorkspace();
+        core.info("_workspace: " + workspace);
         let arm64 = pkgs['linuxARM64'];
         let version = arm64[this._LazarusVersion];
         let fpcVersion = version['fpcversion'];
@@ -607,11 +609,6 @@ class Lazarus {
         let lazarus = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/`;
         lazarus += version['laz'];
         let downloadPath_LIN;
-        let installRoot = process.env['INSTALL_ROOT'];
-        core.info("INSTALL_ROOT: " + installRoot);
-        for (let key in process.env) {
-            core.info("process.env key: " + key + " value: " + process.env[key]);
-        }
         core.info(`_downloadLazarus - Downloading ${lazarus}`);
         core.info(`_downloadFPC - Downloading ${fpc}`);
         // try {
@@ -680,6 +677,11 @@ class Lazarus {
         (0, assert_1.ok)(tempDirectory, 'Expected RUNNER_TEMP to be defined');
         tempDirectory = path.join(tempDirectory, 'installers');
         return tempDirectory;
+    }
+    _getWorkspace() {
+        let workspace = process.env['RUNNER_WORKSPACE'] || '';
+        (0, assert_1.ok)(workspace, 'Expected RUNNER_WORKSPACE to be defined');
+        return workspace;
     }
 }
 exports.Lazarus = Lazarus;
