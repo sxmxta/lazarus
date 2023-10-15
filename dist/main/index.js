@@ -624,7 +624,7 @@ class Lazarus {
                     core.info(`_downloadLazarus - Downloaded into ${downloadPathLaz}`);
                 }
                 // 解压lazarus
-                yield (0, exec_1.exec)(`sudo unzip ${downloadPathLaz}`);
+                yield (0, exec_1.exec)(`unzip ${downloadPathLaz}`);
             }
             catch (error) {
                 throw error;
@@ -642,7 +642,7 @@ class Lazarus {
                     core.info(`_downloadFPC - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压fpc
-                yield (0, exec_1.exec)(`sudo tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
+                yield (0, exec_1.exec)(`tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
             }
             catch (error) {
                 throw error;
@@ -660,7 +660,7 @@ class Lazarus {
                     core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压fpcsrc
-                yield (0, exec_1.exec)(`sudo unzip -b ${downloadPathLaz} ${downloadPath_LIN}`);
+                yield (0, exec_1.exec)(`unzip -b ${downloadPathLaz} ${downloadPath_LIN}`);
             }
             catch (error) {
                 throw error;
