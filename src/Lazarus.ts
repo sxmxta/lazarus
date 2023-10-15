@@ -226,7 +226,7 @@ export class Lazarus {
                     }
                 } else if (this._Arch == 'arm64') {
                     core.info(`linux arm64`);
-                    await this.linuxARM64()
+                    this.linuxARM64(cacheRestored)
                 }
                 break;
             case 'darwin':
@@ -380,14 +380,7 @@ export class Lazarus {
      * 该安装模式依赖于github actions: uraimo/run-on-arch-action
      * 在这里手动编译安装lazarus
      */
-    private async linuxARM64() {
-        // Try to restore installers from cache
-        let cacheRestored = false;
-        if (this._Platform != 'win32') {
-            cacheRestored = await this._Cache.restore();
-        }
-
-
+    private linuxARM64(cacheRestored: boolean) {
         let arm64 = pkgs['linuxARM64']
         let version = arm64[this._LazarusVersion]
         let fpcVersion = version['fpcversion']
