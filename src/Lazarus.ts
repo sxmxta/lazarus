@@ -41,21 +41,21 @@ const pkgs: object = {
     "linuxARM64": {
         "2.2.6": {
             "fpcversion": "3.2.2",
-            "laz": "lazarus-2.2.6-0.zip",
+            "laz": "lazarus-2.2.6-0.tar.gz",
             "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.zip"
+            "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.4": {
             "fpcversion": "3.2.2",
-            "laz": "lazarus-2.2.4-0.zip",
+            "laz": "lazarus-2.2.4-0.tar.gz",
             "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.zip"
+            "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.2": {
             "fpcversion": "3.2.2",
-            "laz": "lazarus-2.2.2-0.zip",
+            "laz": "lazarus-2.2.2-0.tar.gz",
             "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.zip"
+            "fpcsrc": "fpc-3.2.2.source.tar.gz"
         }
     },
     "darwin": {
@@ -387,13 +387,13 @@ export class Lazarus {
         let arm64 = pkgs['linuxARM64']
         let version = arm64[this._LazarusVersion]
         let fpcVersion = version['fpcversion']
-        // lazarus source, zip
+        // lazarus source, tar.gz
         let lazarus: string = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/`
         lazarus += version['laz']
         // fcp, tar
         let fpc: string = `https://sourceforge.net/projects/freepascal/files/Linux/${fpcVersion}/`
         fpc += version['fpc']
-        // fpc source, zip
+        // fpc source, tar.gz
         let fpcsrc: string = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`
         fpcsrc += version['fpcsrc']
 
@@ -411,7 +411,7 @@ export class Lazarus {
                 core.info(`_downloadLazarus - Downloaded into ${downloadPathLaz}`);
             }
             // 解压lazarus
-            await exec(`unzip ${downloadPathLaz}`);
+            await exec(`tar -xzvf ${downloadPathLaz}`);
         } catch (error) {
             throw (error as Error);
         }
@@ -445,7 +445,7 @@ export class Lazarus {
                 core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
             }
             // 解压fpcsrc
-            await exec(`unzip -b ${downloadPathLaz} ${downloadPath_LIN}`);
+            await exec(`tar -xzvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
         } catch (error) {
             throw (error as Error);
         }
