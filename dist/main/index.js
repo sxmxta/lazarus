@@ -595,32 +595,34 @@ class Lazarus {
      */
     linuxARM64(cacheRestored) {
         return __awaiter(this, void 0, void 0, function* () {
+            let tempDir = this._getTempDirectory();
             let workspace = this._getWorkspace();
             core.info("_workspace: " + workspace);
             let arm64 = pkgs['linuxARM64'];
             let version = arm64[this._LazarusVersion];
             let fpcVersion = version['fpcversion'];
             // lazarus source, tar.gz
-            let lazarus = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/`;
-            lazarus += version['laz'];
+            let lazarusDownloadURL = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/`;
+            lazarusDownloadURL += version['laz'];
             // fcp, tar
-            let fpc = `https://sourceforge.net/projects/freepascal/files/Linux/${fpcVersion}/`;
-            fpc += version['fpc'];
+            let fpcDownloadURL = `https://sourceforge.net/projects/freepascal/files/Linux/${fpcVersion}/`;
+            fpcDownloadURL += version['fpc'];
             // fpc source, tar.gz
-            let fpcsrc = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`;
-            fpcsrc += version['fpcsrc'];
-            let lazarusPath = `${workspace}/lazarus`;
+            let fpcsrcDownloadURL = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`;
+            fpcsrcDownloadURL += version['fpcsrc'];
+            let lazarusPath = path.join(workspace, "lazarus");
             let downloadPath_LIN;
-            core.info(`_downloadLazarus - Downloading ${lazarus}`);
+            core.info(`_downloadLazarus - Downloading ${lazarusDownloadURL}`);
             try {
+                let fileName = version['laz'];
                 if (cacheRestored) {
                     // 使用缓存
-                    downloadPath_LIN = path.join(workspace, version['laz']);
+                    downloadPath_LIN = path.join(tempDir, fileName);
                     core.info(`_downloadLazarus - Using cache restored into ${downloadPath_LIN}`);
                 }
                 else {
                     // 下载
-                    downloadPath_LIN = yield tc.downloadTool(fpc, path.join(workspace, version['laz']));
+                    downloadPath_LIN = yield tc.downloadTool(lazarusDownloadURL, path.join(tempDir, fileName));
                     core.info(`_downloadLazarus - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压lazarus
@@ -629,16 +631,17 @@ class Lazarus {
             catch (error) {
                 throw error;
             }
-            core.info(`_downloadFPC - Downloading ${fpc}`);
+            core.info(`_downloadFPC - Downloading ${fpcDownloadURL}`);
             try {
+                let fileName = version['fpc'];
                 if (cacheRestored) {
                     // 使用缓存
-                    downloadPath_LIN = path.join(workspace, version['fpc']);
+                    downloadPath_LIN = path.join(tempDir, fileName);
                     core.info(`_downloadFPC - Using cache restored into ${downloadPath_LIN}`);
                 }
                 else {
                     // 下载
-                    downloadPath_LIN = yield tc.downloadTool(fpc, path.join(workspace, version['fpc']));
+                    downloadPath_LIN = yield tc.downloadTool(fpcDownloadURL, path.join(tempDir, fileName));
                     core.info(`_downloadFPC - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压fpc
@@ -647,16 +650,17 @@ class Lazarus {
             catch (error) {
                 throw error;
             }
-            core.info(`_downloadFPCSrc - Downloading ${fpcsrc}`);
+            core.info(`_downloadFPCSrc - Downloading ${fpcsrcDownloadURL}`);
             try {
+                let fileName = version['fpcsrc'];
                 if (cacheRestored) {
                     // 使用缓存
-                    downloadPath_LIN = path.join(workspace, version['fpcsrc']);
+                    downloadPath_LIN = path.join(tempDir, fileName);
                     core.info(`_downloadFPCSrc - Using cache restored into ${downloadPath_LIN}`);
                 }
                 else {
                     // 下载
-                    downloadPath_LIN = yield tc.downloadTool(fpcsrc, path.join(workspace, version['fpcsrc']));
+                    downloadPath_LIN = yield tc.downloadTool(fpcsrcDownloadURL, path.join(tempDir, fileName));
                     core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压fpcsrc
