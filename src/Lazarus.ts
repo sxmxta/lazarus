@@ -38,6 +38,26 @@ const pkgs: object = {
             "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
         }
     },
+    "linuxARM64": {
+        "2.2.6": {
+            "fpcversion": "3.2.2",
+            "laz": "lazarus-2.2.6-0.zip",
+            "fpc": "fpc-3.2.2.aarch64-linux.tar",
+            "fpcsrc": "fpc-3.2.2.source.zip"
+        },
+        "2.2.4": {
+            "fpcversion": "3.2.2",
+            "laz": "lazarus-2.2.4-0.zip",
+            "fpc": "fpc-3.2.2.aarch64-linux.tar",
+            "fpcsrc": "fpc-3.2.2.source.zip"
+        },
+        "2.2.2": {
+            "fpcversion": "3.2.2",
+            "laz": "lazarus-2.2.2-0.zip",
+            "fpc": "fpc-3.2.2.aarch64-linux.tar",
+            "fpcsrc": "fpc-3.2.2.source.zip"
+        }
+    },
     "darwin": {
         "2.2.6": {
             "laz": "Lazarus-2.2.6-0-x86_64-macosx.pkg",
@@ -206,6 +226,7 @@ export class Lazarus {
                     }
                 } else if (this._Arch == 'arm64') {
                     core.info(`linux arm64`);
+                    await this.linuxARM64()
                 }
                 break;
             case 'darwin':
@@ -351,6 +372,72 @@ export class Lazarus {
             default:
                 throw new Error(`_downloadLazarus - Platform not implemented: ${this._Platform}`);
         }
+    }
+
+    /**
+     * @private
+     * linux arm 64单独安装
+     * 该安装模式依赖于github actions: uraimo/run-on-arch-action
+     * 在这里手动编译安装lazarus
+     */
+    private async linuxARM64() {
+        // Try to restore installers from cache
+        let cacheRestored = false;
+        if (this._Platform != 'win32') {
+            cacheRestored = await this._Cache.restore();
+        }
+
+
+        let arm64 = pkgs['linuxARM64']
+        let version = arm64[this._LazarusVersion]
+        let fpcVersion = version['fpcversion']
+        // fcp, tar
+        let fpc: string = `https://sourceforge.net/projects/freepascal/files/Linux/${fpcVersion}/`
+        fpc += version['fpc']
+        // fpc source, zip
+        let fpcsrc: string = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`
+        fpcsrc += version['fpcsrc']
+        // lazarus source, zip
+        let lazarus: string = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/`
+        lazarus += version['laz']
+
+        let downloadPath_LIN: string;
+
+        core.info(`_downloadLazarus - Downloading ${lazarus}`);
+
+        core.info(`_downloadFPC - Downloading ${fpc}`);
+        // try {
+        //     if (cacheRestored) {
+        //         // 使用缓存
+        //         downloadPath_LIN = path.join(this._getTempDirectory(), version['fpc']);
+        //         core.info(`_downloadFPC - Using cache restored into ${downloadPath_LIN}`);
+        //     } else {
+        //         // 下载
+        //         downloadPath_LIN = await tc.downloadTool(fpc, path.join(this._getTempDirectory(), version['fpc']));
+        //         core.info(`_downloadFPC - Downloaded into ${downloadPath_LIN}`);
+        //     }
+        //     // 解压fpc
+        //     await exec(`tar -xvf ${version['fpc']}`);
+        // } catch (error) {
+        //     throw (error as Error);
+        // }
+
+        core.info(`_downloadFPCSrc - Downloading ${fpcsrc}`);
+        // try {
+        //     if (cacheRestored) {
+        //         // 使用缓存
+        //         downloadPath_LIN = path.join(this._getTempDirectory(), version['fpcsrc']);
+        //         core.info(`_downloadFPCSrc - Using cache restored into ${downloadPath_LIN}`);
+        //     } else {
+        //         // 下载
+        //         downloadPath_LIN = await tc.downloadTool(fpcsrc, path.join(this._getTempDirectory(), version['fpcsrc']));
+        //         core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
+        //     }
+        //     // 解压fpc
+        //     await exec(`unzip -d ${version['fpcsrc']}`);
+        // } catch (error) {
+        //     throw (error as Error);
+        // }
     }
 
     private _getPackageURL(
