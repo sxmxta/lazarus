@@ -395,7 +395,11 @@ export class Lazarus {
         lazarus += version['laz']
 
         let downloadPath_LIN: string;
-
+        let installRoot = process.env['INSTALL_ROOT'];
+        core.info("INSTALL_ROOT: " + installRoot)
+        for(let key in process.env){
+            core.info("process.env key: " + key + " value: " + process.env[key])
+        }
         core.info(`_downloadLazarus - Downloading ${lazarus}`);
 
         core.info(`_downloadFPC - Downloading ${fpc}`);
