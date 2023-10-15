@@ -609,22 +609,22 @@ class Lazarus {
             // fpc source, tar.gz
             let fpcsrc = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`;
             fpcsrc += version['fpcsrc'];
-            let downloadPathLaz;
+            let lazarusPath = `${workspace}/lazarus`;
             let downloadPath_LIN;
             core.info(`_downloadLazarus - Downloading ${lazarus}`);
             try {
                 if (cacheRestored) {
                     // 使用缓存
-                    downloadPathLaz = path.join(workspace, version['laz']);
-                    core.info(`_downloadLazarus - Using cache restored into ${downloadPathLaz}`);
+                    downloadPath_LIN = path.join(workspace, version['laz']);
+                    core.info(`_downloadLazarus - Using cache restored into ${downloadPath_LIN}`);
                 }
                 else {
                     // 下载
-                    downloadPathLaz = yield tc.downloadTool(fpc, path.join(workspace, version['laz']));
-                    core.info(`_downloadLazarus - Downloaded into ${downloadPathLaz}`);
+                    downloadPath_LIN = yield tc.downloadTool(fpc, path.join(workspace, version['laz']));
+                    core.info(`_downloadLazarus - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压lazarus
-                yield (0, exec_1.exec)(`tar -xvf ${downloadPathLaz}`);
+                yield (0, exec_1.exec)(`tar -xvf ${downloadPath_LIN} -C ${workspace}`);
             }
             catch (error) {
                 throw error;
@@ -642,7 +642,7 @@ class Lazarus {
                     core.info(`_downloadFPC - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压fpc
-                yield (0, exec_1.exec)(`tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
+                yield (0, exec_1.exec)(`tar -xvf ${downloadPath_LIN} -C ${lazarusPath}`);
             }
             catch (error) {
                 throw error;
@@ -660,7 +660,7 @@ class Lazarus {
                     core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
                 }
                 // 解压fpcsrc
-                yield (0, exec_1.exec)(`tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
+                yield (0, exec_1.exec)(`tar -xvf ${downloadPath_LIN} -C ${lazarusPath}`);
             }
             catch (error) {
                 throw error;

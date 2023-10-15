@@ -397,21 +397,21 @@ export class Lazarus {
         let fpcsrc: string = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`
         fpcsrc += version['fpcsrc']
 
-        let downloadPathLaz: string;
+        let lazarusPath: string = `${workspace}/lazarus`;
         let downloadPath_LIN: string;
         core.info(`_downloadLazarus - Downloading ${lazarus}`);
         try {
             if (cacheRestored) {
                 // 使用缓存
-                downloadPathLaz = path.join(workspace, version['laz']);
-                core.info(`_downloadLazarus - Using cache restored into ${downloadPathLaz}`);
+                downloadPath_LIN = path.join(workspace, version['laz']);
+                core.info(`_downloadLazarus - Using cache restored into ${downloadPath_LIN}`);
             } else {
                 // 下载
-                downloadPathLaz = await tc.downloadTool(fpc, path.join(workspace, version['laz']));
-                core.info(`_downloadLazarus - Downloaded into ${downloadPathLaz}`);
+                downloadPath_LIN = await tc.downloadTool(fpc, path.join(workspace, version['laz']));
+                core.info(`_downloadLazarus - Downloaded into ${downloadPath_LIN}`);
             }
             // 解压lazarus
-            await exec(`tar -xvf ${downloadPathLaz}`);
+            await exec(`tar -xvf ${downloadPath_LIN} -C ${workspace}`);
         } catch (error) {
             throw (error as Error);
         }
@@ -428,7 +428,7 @@ export class Lazarus {
                 core.info(`_downloadFPC - Downloaded into ${downloadPath_LIN}`);
             }
             // 解压fpc
-            await exec(`tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
+            await exec(`tar -xvf ${downloadPath_LIN} -C ${lazarusPath}`);
         } catch (error) {
             throw (error as Error);
         }
@@ -445,7 +445,7 @@ export class Lazarus {
                 core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
             }
             // 解压fpcsrc
-            await exec(`tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
+            await exec(`tar -xvf ${downloadPath_LIN} -C ${lazarusPath}`);
         } catch (error) {
             throw (error as Error);
         }
