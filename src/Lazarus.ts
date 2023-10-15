@@ -411,7 +411,7 @@ export class Lazarus {
                 core.info(`_downloadLazarus - Downloaded into ${downloadPathLaz}`);
             }
             // 解压lazarus
-            await exec(`tar -xzvf ${downloadPathLaz}`);
+            await exec(`tar -xvf ${downloadPathLaz}`);
         } catch (error) {
             throw (error as Error);
         }
@@ -445,7 +445,7 @@ export class Lazarus {
                 core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
             }
             // 解压fpcsrc
-            await exec(`tar -xzvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
+            await exec(`tar -xvf ${downloadPath_LIN} -C ${downloadPathLaz}`);
         } catch (error) {
             throw (error as Error);
         }
