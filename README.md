@@ -2,6 +2,9 @@
 
 [![Actions Status](https://github.com/sxmxta/lazarus/workflows/build/badge.svg)](https://github.com/sxmxta/lazarus/actions)
 
+Originating from [setup-lazarus](https://github.com/gcarreno/setup-lazarus)
+- Added Linux aarch64 architecture
+
 Set up your GitHub Actions workflow with a specific version of Lazarus
 
 ## Inputs
@@ -10,11 +13,10 @@ Set up your GitHub Actions workflow with a specific version of Lazarus
 
 **REQUIRED** Lazarus version.
 
-**DEFAULT** dist.
+**DEFAULT** stable.
 
 Possible values:
 
-* `dist` - Lazarus package that comes with the Ubuntu dist you chose on `runs-on` and for Windows the latest stable
 * `stable` - Installs the latest stable version: 2.2.6
 * `2.2.6`  - comes with `FPC v3.2.2`
 * `2.2.4`  - comes with `FPC v3.2.2`
@@ -50,17 +52,13 @@ This is a boolean input and will use cache if set to `true`.
 At the moment this action only supports:
 
 - Windows (platform=win32, arch=x64)
-- Linux (platform=linux, arch=x64)
+- Linux (platform=linux, arch=x64, aarch64)
 - macOS (platform=darwin, arch=x64)
 
 ### IMPORTANT
-
-Due to the hard work of [Levi](https://github.com/leviable) there is now support for macOS.
-
-Unfortunately there are some restrictions:
-
-- The GitHub macOS runners only support Lazarus versions 2.0.8 and up.
+- Minimum version only supports 2.2.2
 - Until further notice only Cocoa widgset is supported on macOS runners.
+- Linux ARM64 run-on-architecture build
 
 ## Example usage
 
