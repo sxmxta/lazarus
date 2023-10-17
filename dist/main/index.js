@@ -446,145 +446,158 @@ class Lazarus {
                     }
                     break;
                 case 'darwin':
-                    let downloadPath_DAR;
-                    // Get the URL for Free Pascal Source
-                    let downloadFPCSRCURLDAR = this._getPackageURL('fpcsrc');
-                    core.info(`_downloadLazarus - Downloading ${downloadFPCSRCURLDAR}`);
-                    try {
-                        // Decide what the local download filename should be
-                        let downloadName = downloadFPCSRCURLDAR.endsWith('.dmg') ? 'fpcsrc.dmg' : 'fpcsrc.pkg';
-                        if (cacheRestored) {
-                            // Use cached version
-                            downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
-                            core.info(`_downloadLazarus - Using cache restored into ${downloadPath_DAR}`);
-                        }
-                        else {
-                            // Perform the download
-                            downloadPath_DAR = yield tc.downloadTool(downloadFPCSRCURLDAR, path.join(this._getTempDirectory(), downloadName));
-                            core.info(`_downloadLazarus - Downloaded into ${downloadPath_DAR}`);
-                        }
-                        // Download could be a pkg or dmg, handle either case
-                        if (downloadName == 'fpcsrc.dmg') {
-                            // Mount DMG and intall package
-                            yield (0, exec_1.exec)(`sudo hdiutil attach ${downloadPath_DAR}`);
-                            // There MUST be a better way to do this
-                            let fpcsrc = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('fpcsrc'));
-                            let loc = fs.readdirSync('/Volumes/' + fpcsrc[0]).filter(fn => fn.endsWith('.pkg'));
-                            if (loc === undefined || loc[0] === undefined) {
-                                loc = fs.readdirSync('/Volumes/' + fpcsrc[0]).filter(fn => fn.endsWith('.mpkg'));
+                    if (this._Arch == 'x64') {
+                        let downloadPath_DAR;
+                        // Get the URL for Free Pascal Source
+                        let downloadFPCSRCURLDAR = this._getPackageURL('fpcsrc');
+                        core.info(`_downloadLazarus - Downloading ${downloadFPCSRCURLDAR}`);
+                        try {
+                            // Decide what the local download filename should be
+                            let downloadName = downloadFPCSRCURLDAR.endsWith('.dmg') ? 'fpcsrc.dmg' : 'fpcsrc.pkg';
+                            if (cacheRestored) {
+                                // Use cached version
+                                downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                                core.info(`_downloadLazarus - Using cache restored into ${downloadPath_DAR}`);
                             }
-                            let full_path = '/Volumes/' + fpcsrc[0] + '/' + loc[0];
-                            yield (0, exec_1.exec)(`sudo installer -package ${full_path} -target /`);
-                        }
-                        else {
-                            // Install the package
-                            yield (0, exec_1.exec)(`sudo installer -package ${downloadPath_DAR} -target /`);
-                        }
-                    }
-                    catch (error) {
-                        throw error;
-                    }
-                    // Get the URL for Free Pascal's compiler
-                    let downloadFPCURLDAR = this._getPackageURL('fpc');
-                    core.info(`_downloadLazarus - Downloading ${downloadFPCURLDAR}`);
-                    try {
-                        // Decide what the local download filename should be
-                        let downloadName = downloadFPCURLDAR.endsWith('.dmg') ? 'fpc.dmg' : 'fpc.pkg';
-                        if (cacheRestored) {
-                            // Use cached version
-                            downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
-                            core.info(`_downloadLazarus - Using cache restored into ${downloadPath_DAR}`);
-                        }
-                        else {
-                            // Perform the download
-                            downloadPath_DAR = yield tc.downloadTool(downloadFPCURLDAR, path.join(this._getTempDirectory(), downloadName));
-                            core.info(`_downloadLazarus - Downloaded into ${downloadPath_DAR}`);
-                        }
-                        // Download could be a pkg or dmg, handle either case
-                        if (downloadName == 'fpc.dmg') {
-                            // Mount DMG and intall package
-                            yield (0, exec_1.exec)(`sudo hdiutil attach ${downloadPath_DAR}`);
-                            // There MUST be a better way to do this
-                            let fpc = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('fpc'));
-                            let loc = fs.readdirSync('/Volumes/' + fpc[0]).filter(fn => fn.endsWith('.pkg'));
-                            if (loc === undefined || loc[0] === undefined) {
-                                loc = fs.readdirSync('/Volumes/' + fpc[0]).filter(fn => fn.endsWith('.mpkg'));
+                            else {
+                                // Perform the download
+                                downloadPath_DAR = yield tc.downloadTool(downloadFPCSRCURLDAR, path.join(this._getTempDirectory(), downloadName));
+                                core.info(`_downloadLazarus - Downloaded into ${downloadPath_DAR}`);
                             }
-                            let full_path = '/Volumes/' + fpc[0] + '/' + loc[0];
-                            yield (0, exec_1.exec)(`sudo installer -package ${full_path} -target /`);
-                        }
-                        else {
-                            // Install the package
-                            yield (0, exec_1.exec)(`sudo installer -package ${downloadPath_DAR} -target /`);
-                        }
-                    }
-                    catch (error) {
-                        throw error;
-                    }
-                    // Get the URL for the Lazarus IDE
-                    let downloadLazURLDAR = this._getPackageURL('laz');
-                    core.info(`_downloadLazarus - Downloading ${downloadLazURLDAR}`);
-                    try {
-                        // Decide what the local download filename should be
-                        let downloadName = downloadLazURLDAR.endsWith('.dmg') ? 'lazarus.dmg' : 'lazarus.pkg';
-                        if (cacheRestored) {
-                            // Use the cached version
-                            downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
-                            core.info(`_downloadLazarus - Using cache restored into ${downloadPath_DAR}`);
-                        }
-                        else {
-                            // Perform the download
-                            downloadPath_DAR = yield tc.downloadTool(downloadLazURLDAR, path.join(this._getTempDirectory(), downloadName));
-                            core.info(`_downloadLazarus - Downloaded into ${downloadPath_DAR}`);
-                        }
-                        // Download could be a pkg or dmg, handle either case
-                        if (downloadName == 'lazarus.dmg') {
-                            // Mount DMG and intall package
-                            yield (0, exec_1.exec)(`sudo hdiutil attach ${downloadPath_DAR}`);
-                            // There MUST be a better way to do this
-                            let laz = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('lazarus'));
-                            let loc = fs.readdirSync('/Volumes/' + laz[0]).filter(fn => fn.endsWith('.pkg'));
-                            if (loc === undefined || loc[0] === undefined) {
-                                loc = fs.readdirSync('/Volumes/' + laz[0]).filter(fn => fn.endsWith('.mpkg'));
+                            // Download could be a pkg or dmg, handle either case
+                            if (downloadName == 'fpcsrc.dmg') {
+                                // Mount DMG and intall package
+                                yield (0, exec_1.exec)(`sudo hdiutil attach ${downloadPath_DAR}`);
+                                // There MUST be a better way to do this
+                                let fpcsrc = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('fpcsrc'));
+                                let loc = fs.readdirSync('/Volumes/' + fpcsrc[0]).filter(fn => fn.endsWith('.pkg'));
+                                if (loc === undefined || loc[0] === undefined) {
+                                    loc = fs.readdirSync('/Volumes/' + fpcsrc[0]).filter(fn => fn.endsWith('.mpkg'));
+                                }
+                                let full_path = '/Volumes/' + fpcsrc[0] + '/' + loc[0];
+                                yield (0, exec_1.exec)(`sudo installer -package ${full_path} -target /`);
                             }
-                            let full_path = '/Volumes/' + laz[0] + '/' + loc[0];
-                            yield (0, exec_1.exec)(`sudo installer -package ${full_path} -target /`);
+                            else {
+                                // Install the package
+                                yield (0, exec_1.exec)(`sudo installer -package ${downloadPath_DAR} -target /`);
+                            }
                         }
-                        else {
-                            // Install the package
-                            yield (0, exec_1.exec)(`sudo installer -package ${downloadPath_DAR} -target /`);
+                        catch (error) {
+                            throw error;
+                        }
+                        // Get the URL for Free Pascal's compiler
+                        let downloadFPCURLDAR = this._getPackageURL('fpc');
+                        core.info(`_downloadLazarus - Downloading ${downloadFPCURLDAR}`);
+                        try {
+                            // Decide what the local download filename should be
+                            let downloadName = downloadFPCURLDAR.endsWith('.dmg') ? 'fpc.dmg' : 'fpc.pkg';
+                            if (cacheRestored) {
+                                // Use cached version
+                                downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                                core.info(`_downloadLazarus - Using cache restored into ${downloadPath_DAR}`);
+                            }
+                            else {
+                                // Perform the download
+                                downloadPath_DAR = yield tc.downloadTool(downloadFPCURLDAR, path.join(this._getTempDirectory(), downloadName));
+                                core.info(`_downloadLazarus - Downloaded into ${downloadPath_DAR}`);
+                            }
+                            // Download could be a pkg or dmg, handle either case
+                            if (downloadName == 'fpc.dmg') {
+                                // Mount DMG and intall package
+                                yield (0, exec_1.exec)(`sudo hdiutil attach ${downloadPath_DAR}`);
+                                // There MUST be a better way to do this
+                                let fpc = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('fpc'));
+                                let loc = fs.readdirSync('/Volumes/' + fpc[0]).filter(fn => fn.endsWith('.pkg'));
+                                if (loc === undefined || loc[0] === undefined) {
+                                    loc = fs.readdirSync('/Volumes/' + fpc[0]).filter(fn => fn.endsWith('.mpkg'));
+                                }
+                                let full_path = '/Volumes/' + fpc[0] + '/' + loc[0];
+                                yield (0, exec_1.exec)(`sudo installer -package ${full_path} -target /`);
+                            }
+                            else {
+                                // Install the package
+                                yield (0, exec_1.exec)(`sudo installer -package ${downloadPath_DAR} -target /`);
+                            }
+                        }
+                        catch (error) {
+                            throw error;
+                        }
+                        // Get the URL for the Lazarus IDE
+                        let downloadLazURLDAR = this._getPackageURL('laz');
+                        core.info(`_downloadLazarus - Downloading ${downloadLazURLDAR}`);
+                        try {
+                            // Decide what the local download filename should be
+                            let downloadName = downloadLazURLDAR.endsWith('.dmg') ? 'lazarus.dmg' : 'lazarus.pkg';
+                            if (cacheRestored) {
+                                // Use the cached version
+                                downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                                core.info(`_downloadLazarus - Using cache restored into ${downloadPath_DAR}`);
+                            }
+                            else {
+                                // Perform the download
+                                downloadPath_DAR = yield tc.downloadTool(downloadLazURLDAR, path.join(this._getTempDirectory(), downloadName));
+                                core.info(`_downloadLazarus - Downloaded into ${downloadPath_DAR}`);
+                            }
+                            // Download could be a pkg or dmg, handle either case
+                            if (downloadName == 'lazarus.dmg') {
+                                // Mount DMG and intall package
+                                yield (0, exec_1.exec)(`sudo hdiutil attach ${downloadPath_DAR}`);
+                                // There MUST be a better way to do this
+                                let laz = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('lazarus'));
+                                let loc = fs.readdirSync('/Volumes/' + laz[0]).filter(fn => fn.endsWith('.pkg'));
+                                if (loc === undefined || loc[0] === undefined) {
+                                    loc = fs.readdirSync('/Volumes/' + laz[0]).filter(fn => fn.endsWith('.mpkg'));
+                                }
+                                let full_path = '/Volumes/' + laz[0] + '/' + loc[0];
+                                yield (0, exec_1.exec)(`sudo installer -package ${full_path} -target /`);
+                            }
+                            else {
+                                // Install the package
+                                yield (0, exec_1.exec)(`sudo installer -package ${downloadPath_DAR} -target /`);
+                            }
+                        }
+                        catch (error) {
+                            throw error;
+                        }
+                        // For 2.0.10 and older, lazbuild symlink is /Library/Lazarus/lazbuild
+                        // For 2.0.12, lazbuild symlink is /Applications/Lazarus/lazbuild
+                        // Update the symlink to lazbuild
+                        const lazLibPath = '/Library/Lazarus/lazbuild';
+                        const lazAppPath = '/Applications/Lazarus/lazbuild';
+                        try {
+                            if (fs.existsSync(`${lazLibPath}`)) {
+                                core.info(`_downloadLazarus - Do not need to update lazbuild symlink`);
+                            }
+                            else if (fs.existsSync(`${lazAppPath}`)) {
+                                core.info(`_downloadLazarus - Updating lazbuild symlink to ${lazAppPath}`);
+                                // Remove bad symlink
+                                yield (0, exec_1.exec)(`rm -rf /usr/local/bin/lazbuild`);
+                                // Add good symlink
+                                yield (0, exec_1.exec)(`ln -s ${lazAppPath} /usr/local/bin/lazbuild`);
+                            }
+                            else {
+                                throw new Error(`Could not find lazbuild in ${lazLibPath} or ${lazAppPath}`);
+                            }
+                        }
+                        catch (error) {
+                            throw error;
                         }
                     }
-                    catch (error) {
-                        throw error;
-                    }
-                    // For 2.0.10 and older, lazbuild symlink is /Library/Lazarus/lazbuild
-                    // For 2.0.12, lazbuild symlink is /Applications/Lazarus/lazbuild
-                    // Update the symlink to lazbuild
-                    const lazLibPath = '/Library/Lazarus/lazbuild';
-                    const lazAppPath = '/Applications/Lazarus/lazbuild';
-                    try {
-                        if (fs.existsSync(`${lazLibPath}`)) {
-                            core.info(`_downloadLazarus - Do not need to update lazbuild symlink`);
-                        }
-                        else if (fs.existsSync(`${lazAppPath}`)) {
-                            core.info(`_downloadLazarus - Updating lazbuild symlink to ${lazAppPath}`);
-                            // Remove bad symlink
-                            yield (0, exec_1.exec)(`rm -rf /usr/local/bin/lazbuild`);
-                            // Add good symlink
-                            yield (0, exec_1.exec)(`ln -s ${lazAppPath} /usr/local/bin/lazbuild`);
-                        }
-                        else {
-                            throw new Error(`Could not find lazbuild in ${lazLibPath} or ${lazAppPath}`);
-                        }
-                    }
-                    catch (error) {
-                        throw error;
+                    else if (this._Arch == 'arm64') {
+                        core.info(`macos arm64`);
+                        yield this.macOSARM64(cacheRestored);
                     }
                     break;
                 default:
                     throw new Error(`_downloadLazarus - Platform not implemented: ${this._Platform}`);
             }
+        });
+    }
+    macOSARM64(cacheRestored) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let tempDir = this._getTempDirectory();
+            let workspace = this._getWorkspace();
+            core.info("_workspace: " + workspace);
         });
     }
     /**
