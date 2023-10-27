@@ -111,6 +111,7 @@ export class Lazarus {
             default:
                 throw new Error(`getLazarus - Version not available: ${this._LazarusVersion}`);
         }
+        await this._Cache.save()
     }
 
     private async _downloadLazarus(): Promise<void> {
@@ -378,7 +379,7 @@ export class Lazarus {
         }
     }
 
-    private async macOSARM64(cacheRestored: boolean){
+    private async macOSARM64(cacheRestored: boolean) {
         let tempDir = this._getTempDirectory();
         let workspace = this._getWorkspace();
         core.info("_workspace: " + workspace)

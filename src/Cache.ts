@@ -1,6 +1,6 @@
 import * as cache from '@actions/cache';
 import * as core from '@actions/core';
-import { ok } from 'assert';
+import {ok} from 'assert';
 import * as path from 'path';
 
 export class Cache {
@@ -16,7 +16,7 @@ export class Cache {
         this._key = Value;
     }
 
-    constructor (WithCache: boolean) {
+    constructor(WithCache: boolean) {
         let tempDirectory = process.env['RUNNER_TEMP'] || '';
         ok(tempDirectory, 'Expected RUNNER_TEMP to be defined');
 
@@ -25,7 +25,7 @@ export class Cache {
     }
 
     async restore(): Promise<boolean> {
-        if (this._withCache === true) {
+        if (this._withCache) {
             core.info(`Cache.restore -- Key: ${this._key} dir: ${this._dir}`);
             let cacheLoaded = await cache.restoreCache([this._dir], this._key) != null;
             if (!cacheLoaded) {
@@ -44,12 +44,12 @@ export class Cache {
     }
 
     async save(): Promise<void> {
-        if (this._withCache === true) {
+        if (this._withCache) {
             try {
                 let key = process.env['SAVE_CACHE_KEY'] || '';
                 let dir = process.env['SAVE_CACHE_DIR'] || '';
 
-                if (key !='' && dir != '') {
+                if (key != '' && dir != '') {
                     core.info(`Cache.save -- Key: ${key} dir: ${dir}`);
                     await cache.saveCache([dir], key);
                 } else {

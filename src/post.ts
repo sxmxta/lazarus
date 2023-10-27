@@ -1,7 +1,6 @@
-import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 
-import { Cache } from './Cache';
+import {Cache} from './Cache';
 
 async function run(): Promise<void> {
 

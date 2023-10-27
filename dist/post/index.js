@@ -60,7 +60,7 @@ class Cache {
     }
     restore() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._withCache === true) {
+            if (this._withCache) {
                 core.info(`Cache.restore -- Key: ${this._key} dir: ${this._dir}`);
                 let cacheLoaded = (yield cache.restoreCache([this._dir], this._key)) != null;
                 if (!cacheLoaded) {
@@ -81,7 +81,7 @@ class Cache {
     }
     save() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._withCache === true) {
+            if (this._withCache) {
                 try {
                     let key = process.env['SAVE_CACHE_KEY'] || '';
                     let dir = process.env['SAVE_CACHE_DIR'] || '';
