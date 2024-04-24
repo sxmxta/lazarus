@@ -87,6 +87,7 @@ const pkgs: object = {
     "darwin": {
         "3.2": {
             "laz": "Lazarus-3.2-macosx-x86_64.pkg",
+            "fpcsrclaz": "fpc-src-3.2.2-2-laz.pkg",
             "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
             "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
         },
@@ -349,6 +350,47 @@ export class Lazarus {
                         throw (error as Error);
                     }
 
+                    // Lazarus 3.2 fpcsrclaz
+                    if (this._LazarusVersion === "3.2") {
+                        // Get the URL for the fpcsrclaz
+                        let downloadFPCSrcLazURLDAR: string = this._getPackageURL('fpcsrclaz');
+                        core.info(`_downloadFPCSrcLaz - Downloading ${downloadFPCSrcLazURLDAR}`);
+                        try {
+                            // Decide what the local download filename should be
+                            let downloadName = downloadFPCSrcLazURLDAR.endsWith('.dmg') ? 'fpcsrclaz.dmg' : 'fpcsrclaz.pkg';
+
+                            if (cacheRestored) {
+                                // Use the cached version
+                                downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                                core.info(`_downloadFPCSrcLaz - Using cache restored into ${downloadPath_DAR}`);
+                            } else {
+                                // Perform the download
+                                downloadPath_DAR = await tc.downloadTool(downloadFPCSrcLazURLDAR, path.join(this._getTempDirectory(), downloadName));
+                                core.info(`_downloadFPCSrcLaz - Downloaded into ${downloadPath_DAR}`);
+                            }
+
+                            // Download could be a pkg or dmg, handle either case
+                            if (downloadName == 'fpcsrclaz.dmg') {
+                                // Mount DMG and intall package
+                                await exec(`sudo hdiutil attach ${downloadPath_DAR}`);
+
+                                // There MUST be a better way to do this
+                                let laz = fs.readdirSync('/Volumes').filter(fn => fn.startsWith('fpcsrclaz'));
+                                let loc = fs.readdirSync('/Volumes/' + laz[0]).filter(fn => fn.endsWith('.pkg'));
+                                if (loc === undefined || loc[0] === undefined) {
+                                    loc = fs.readdirSync('/Volumes/' + laz[0]).filter(fn => fn.endsWith('.mpkg'));
+                                }
+                                let full_path = '/Volumes/' + laz[0] + '/' + loc[0]
+                                await exec(`sudo installer -package ${full_path} -target /`);
+                            } else {
+                                // Install the package
+                                await exec(`sudo installer -package ${downloadPath_DAR} -target /`);
+                            }
+                        } catch (error) {
+                            throw (error as Error);
+                        }
+                    }
+
                     // Get the URL for the Lazarus IDE
                     let downloadLazURLDAR: string = this._getPackageURL('laz');
                     core.info(`_downloadLazarus - Downloading ${downloadLazURLDAR}`);
@@ -529,6 +571,7 @@ export class Lazarus {
                 break;
             case "darwin":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%20${this._LazarusVersion}/`;
+                // pkgs[darwin][version][fileName]
                 result += pkgs[this._Platform][this._LazarusVersion][pkg];
                 break;
             default:
