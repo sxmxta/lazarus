@@ -10,7 +10,7 @@ inputs:
   lazarus-version:
     description: 'Version of Lazarus'
     required: true
-    default: '2.2.6'
+    default: '3.2'
   include-packages:
     description: 'Include packages that the project needs'
     required: false

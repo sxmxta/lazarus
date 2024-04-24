@@ -223,19 +223,33 @@ const path = __importStar(__nccwpck_require__(1017));
 const assert_1 = __nccwpck_require__(9491);
 const fs = __importStar(__nccwpck_require__(7147));
 const Cache_1 = __nccwpck_require__(3123);
-const StableVersion = '2.2.6';
+const StableVersion = '3.2';
 const pkgs = {
     "win32": {
+        "3.2": "lazarus-3.2-fpc-3.2.2-win32.exe",
+        "3.0": "lazarus-3.0-fpc-3.2.2-win32.exe",
         "2.2.6": "lazarus-2.2.6-fpc-3.2.2-win32.exe",
         "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win32.exe",
         "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win32.exe"
     },
     "win64": {
+        "3.2": "lazarus-3.2-fpc-3.2.2-win64.exe",
+        "3.0": "lazarus-3.0-fpc-3.2.2-win64.exe",
         "2.2.6": "lazarus-2.2.6-fpc-3.2.2-win64.exe",
         "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win64.exe",
         "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win64.exe"
     },
     "linux": {
+        "3.2": {
+            "laz": "lazarus-project_3.2.0-0_amd64.deb",
+            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
+            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
+        },
+        "3.0": {
+            "laz": "lazarus-project_3.0.0-0_amd64.deb",
+            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
+            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
+        },
         "2.2.6": {
             "laz": "lazarus-project_2.2.6-0_amd64.deb",
             "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
@@ -253,6 +267,18 @@ const pkgs = {
         }
     },
     "linuxARM64": {
+        "3.2": {
+            "fpcversion": "3.2.2",
+            "laz": "lazarus-3.2-0.tar.gz",
+            "fpc": "fpc-3.2.2.aarch64-linux.tar",
+            "fpcsrc": "fpc-3.2.2.source.tar.gz"
+        },
+        "3.0": {
+            "fpcversion": "3.2.2",
+            "laz": "lazarus-3.0-0.tar.gz",
+            "fpc": "fpc-3.2.2.aarch64-linux.tar",
+            "fpcsrc": "fpc-3.2.2.source.tar.gz"
+        },
         "2.2.6": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.6-0.tar.gz",
@@ -273,6 +299,16 @@ const pkgs = {
         }
     },
     "darwin": {
+        "3.2": {
+            "laz": "Lazarus-3.2-macosx-x86_64.pkg",
+            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
+            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
+        },
+        "3.0": {
+            "laz": "Lazarus-3.0-macosx-x86_64.pkg",
+            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
+            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
+        },
         "2.2.6": {
             "laz": "Lazarus-2.2.6-0-x86_64-macosx.pkg",
             "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
@@ -314,6 +350,8 @@ class Lazarus {
                     this._Cache.Key = this._LazarusVersion + '-' + this._Arch + '-' + this._Platform;
                     yield this._downloadLazarus();
                     break;
+                case '3.2':
+                case '3.0':
                 case '2.2.6':
                 case '2.2.4':
                 case '2.2.2':
