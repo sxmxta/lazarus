@@ -389,6 +389,8 @@ class Lazarus {
                     this._Cache.Key = this._LazarusVersion + '-' + this._Arch + '-' + this._Platform;
                     yield this._downloadLazarus();
                     break;
+                case '3.6':
+                case '3.4':
                 case '3.2':
                 case '3.0':
                 case '2.2.6':
